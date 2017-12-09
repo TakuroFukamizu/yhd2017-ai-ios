@@ -14,6 +14,9 @@
 		0C0879101F8F69F1001252A4 /* CIImage+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C08790F1F8F69F1001252A4 /* CIImage+Helpers.swift */; };
 		0C494AA91FD727190094C987 /* TinyYOLOClpy.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0C494AA81FD727190094C987 /* TinyYOLOClpy.mlmodel */; };
 		0C7B168F1F8CB11B0042A67A /* DetectQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7B168E1F8CB11B0042A67A /* DetectQueue.swift */; };
+		3C160E091FDBBC6300517A67 /* ViewController+CB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C160E081FDBBC6300517A67 /* ViewController+CB.swift */; };
+		3C160E0B1FDBC3FB00517A67 /* BLECommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C160E0A1FDBC3FB00517A67 /* BLECommand.swift */; };
+		3C160E0F1FDBF58200517A67 /* ViewController+Cameras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C160E0E1FDBF58200517A67 /* ViewController+Cameras.swift */; };
 		7BA1C6D01EF27DA000BB25EF /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC25FB51EF27C0D002ECBBA /* VideoCapture.swift */; };
 		7BA1C6D21EF2827800BB25EF /* UIImage+CVPixelBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA1C6D11EF2827500BB25EF /* UIImage+CVPixelBuffer.swift */; };
 		7BA1C6D81EF2871600BB25EF /* YOLO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA1C6D71EF2871600BB25EF /* YOLO.swift */; };
@@ -32,6 +35,9 @@
 		0C494AA81FD727190094C987 /* TinyYOLOClpy.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = TinyYOLOClpy.mlmodel; sourceTree = "<group>"; };
 		0C7B168B1F83DDBD0042A67A /* TinyYOLO.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = TinyYOLO.mlmodel; sourceTree = "<group>"; };
 		0C7B168E1F8CB11B0042A67A /* DetectQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectQueue.swift; sourceTree = "<group>"; };
+		3C160E081FDBBC6300517A67 /* ViewController+CB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+CB.swift"; sourceTree = "<group>"; };
+		3C160E0A1FDBC3FB00517A67 /* BLECommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLECommand.swift; sourceTree = "<group>"; };
+		3C160E0E1FDBF58200517A67 /* ViewController+Cameras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Cameras.swift"; sourceTree = "<group>"; };
 		7BA1C6D11EF2827500BB25EF /* UIImage+CVPixelBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+CVPixelBuffer.swift"; sourceTree = "<group>"; };
 		7BA1C6D71EF2871600BB25EF /* YOLO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YOLO.swift; sourceTree = "<group>"; };
 		7BA1C6D91EF2B30200BB25EF /* CVPixelBuffer+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CVPixelBuffer+Helpers.swift"; sourceTree = "<group>"; };
@@ -70,6 +76,7 @@
 			children = (
 				0C0879111F8F6A2E001252A4 /* CoreML */,
 				0C7B168E1F8CB11B0042A67A /* DetectQueue.swift */,
+				3C160E0A1FDBC3FB00517A67 /* BLECommand.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -79,6 +86,8 @@
 			children = (
 				7BC25FA51EF1B7D1002ECBBA /* Main.storyboard */,
 				7BC25FA31EF1B7D1002ECBBA /* ViewController.swift */,
+				3C160E081FDBBC6300517A67 /* ViewController+CB.swift */,
+				3C160E0E1FDBF58200517A67 /* ViewController+Cameras.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -206,11 +215,14 @@
 				0C7B168F1F8CB11B0042A67A /* DetectQueue.swift in Sources */,
 				0C0879101F8F69F1001252A4 /* CIImage+Helpers.swift in Sources */,
 				0C0231321F7A52DF00EDB7F4 /* AppDelegate.swift in Sources */,
+				3C160E091FDBBC6300517A67 /* ViewController+CB.swift in Sources */,
 				0C494AA91FD727190094C987 /* TinyYOLOClpy.mlmodel in Sources */,
 				7BA1C6D01EF27DA000BB25EF /* VideoCapture.swift in Sources */,
+				3C160E0F1FDBF58200517A67 /* ViewController+Cameras.swift in Sources */,
 				7BA1C6DA1EF2B30200BB25EF /* CVPixelBuffer+Helpers.swift in Sources */,
 				7BA1C6D21EF2827800BB25EF /* UIImage+CVPixelBuffer.swift in Sources */,
 				0C0231311F7A52DF00EDB7F4 /* BoundingBox.swift in Sources */,
+				3C160E0B1FDBC3FB00517A67 /* BLECommand.swift in Sources */,
 				0C0231331F7A52DF00EDB7F4 /* Helpers.swift in Sources */,
 				0C08790A1F8E0502001252A4 /* UIDevice+platform.swift in Sources */,
 				7BC25FA41EF1B7D1002ECBBA /* ViewController.swift in Sources */,
