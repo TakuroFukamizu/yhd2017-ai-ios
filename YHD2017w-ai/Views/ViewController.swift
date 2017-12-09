@@ -309,12 +309,13 @@ class ViewController: UIViewController {
                 let center = CGPoint(x: width / 2, y: height / 2)
                 
                 var commandQueue : [BLECommand] = []
+                commandQueue.append(BLECommand(kind: CommandKind.servomotorOn, time:0)) //クラッピーを起こす
                 if targetCluppy.center.x < center.x { // 右
-                    commandQueue.append(BLECommand(kind: CommandKind.turnLeft, time:3000))
+                    commandQueue.append(BLECommand(kind: CommandKind.turnLeft, time:1500))
                 } else if center.x < targetCluppy.center.x { //左
-                    commandQueue.append(BLECommand(kind: CommandKind.turnRight, time:3000))
+                    commandQueue.append(BLECommand(kind: CommandKind.turnRight, time:1500))
                 }
-                commandQueue.append(BLECommand(kind: CommandKind.forward, time:10000))
+                commandQueue.append(BLECommand(kind: CommandKind.forward, time:6000)) //前進して迫る
                 
                 // BLE コマンド送信
                 for cmd in commandQueue {

@@ -15,6 +15,8 @@ public enum CommandKind {
     case spinTurn
     case turnLeft
     case turnRight
+    case servomotorOn
+    case servomotorOff
 }
 
 public class BLECommand {
@@ -48,6 +50,12 @@ public class BLECommand {
             break
         case .turnRight:
             bytes[0] = 0x13
+            break
+        case .servomotorOn:
+            bytes[0] = 0x21
+            break
+        case .servomotorOff:
+            bytes[0] = 0x22
             break
         }
 
