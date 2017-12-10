@@ -5,12 +5,15 @@ import CoreMedia
 import VideoToolbox
 import UserNotifications
 import CoreBluetooth
+import SocketIO
 
 enum DriveMode {
     case waiting //反転中, 動作中
     case detecting //ダルマさんが転んだ
     case terminator //狩りにいく
 }
+
+
 
 class ViewController: UIViewController {
     @IBOutlet weak var videoPreview: UIView!
@@ -20,10 +23,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var resetButton: UIButton!
     
     @IBAction func onResetButonClick() {
-        self.cluppies = []
-        if self.currentMode == .waiting {
-            self.currentMode = .detecting
-        }
+        self.doRobotReset()
     }
 
     let yolo = YOLO()
@@ -53,8 +53,19 @@ class ViewController: UIViewController {
     var peripheral: CBPeripheral!
     var serviceUUID : CBUUID! = CBUUID(string: "6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
     var charcteristicUUID: CBUUID! = CBUUID(string: "6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
+    var charcteristic2UUID: CBUUID! = CBUUID(string: "6E400003-B5A3-F393-E0A9-E50E24DCCA9E")
     var botService : CBService!
-    var botCmdChara : CBCharacteristic!
+    var botCmdChara : CBCharacteristic! //挙動制御用
+    var botManChara : CBCharacteristic! //マニュアル操作用
+    
+    // for Control Robot
+    var cluppies : [Player] = []
+    var cmdQueueItrt : CommandQueueIterator?
+    var cmdExecTimer : Timer?
+    var cmdNextDelay : TimeInterval = 0.0
+    
+    // for WebSocket
+    let manager = SocketManager(socketURL: URL(string: "ws://fr-test03.mybluemix.net/ws/boxtalk")!, config: [.log(true), .compress, .forceWebsockets(true)])
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,6 +90,7 @@ class ViewController: UIViewController {
         //    }
 
         self.setupBLE()
+//        self.setupWS()
     }
 
     override func didReceiveMemoryWarning() {
@@ -93,6 +105,46 @@ class ViewController: UIViewController {
         centralManager = CBCentralManager(delegate: self, queue: nil)
 //        serviceUUID = CBUUID(string: "6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
 //        charcteristicUUID = CBUUID(string: "6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
+    }
+    
+    private func setupWS() {
+        let socket = self.manager.defaultSocket
+        socket.on(clientEvent: .connect) {data, ack in
+            print("socket connected")
+        }
+//        socket.on(clientEvent: )
+        
+        socket.on("message") {data, ack in
+            print("websocket onMessage \(data)")
+            if let message = data as? [String] {
+                switch message[0] {
+                case "event7": //「ダルマさんが転んだ」
+                    self.doRobotDMSCD()
+                    break
+                case "start":
+                    break
+                case "reset":
+                    self.doRobotReset()
+                    break
+                default:
+                    print("undefined command from websocket : \(message[0])")
+                }
+            }
+
+//            guard let cur = data[0] as? Double else { return }
+//
+////            socket.emitWithAck("canUpdate", cur).timingOut(after: 0) {data in
+////                socket.emit("update", ["amount": cur + 2.50])
+////            }
+////
+//            ack.with("Got your currentAmount", "dude")
+        }
+//        CFRunLoopRun()
+        socket.connect()
+    }
+    
+    func getBleNotifyManualCmd(data: Data) {
+        self.doRobotDMSCD()
     }
 
     // MARK: - Initialization
@@ -195,142 +247,6 @@ class ViewController: UIViewController {
         var rect: CGRect
     }
 
-    var cluppies : [Player] = []
-    
-    func createDummyPlayer() -> Player {
-        return Player(classIndex: 999, center:CGPoint(x:0, y:0), rect:CGRect(x:0, y:0, width:0, height:0))
-    }
-    
-    func createPlayerFromPrediction(from: YOLO.Prediction) -> Player {
-        let pointX = from.rect.midX
-        let pointY = from.rect.midY
-        
-        let center = CGPoint(x:pointX, y:pointY)
-        return Player(classIndex: from.classIndex, center: center, rect:from.rect)
-    }
-    
-    // 中心点を比較して、差分が許容値を超えたら移動したと判定する
-    func getCenterDiff(p1: Player, p2: Player) -> Bool {
-        var diffX:CGFloat = 50 //差分許容値(X)
-        var diffY:CGFloat = 100 //差分許容値(Y) クラッピーの構造上、下方向のズレは大きい
-        
-        // TODO : スケール計算
-        
-        let point1 = p1.center
-        let point2 = p2.center
-        if point1.x < point2.x && diffX < (point2.x - point1.x) {
-            return true
-        }
-        if point2.x < point1.x && diffX < (point1.x - point2.x) {
-            return true
-        }
-        if point1.y < point2.y && diffY < (point2.y - point1.y) {
-            return true
-        }
-        if point2.y < point1.y && diffY < (point1.y - point2.y) {
-            return true
-        }
-        return false
-    }
-    
-    /// 同一判断する, 差分確認する, 追いかける
-    func detectPlayerAndDiff(predictions: [YOLO.Prediction]) {
-        if self.cluppies.count == 0 { //初回 or クリア後
-            for i in 0..<boundingBoxes.count {
-                if i < predictions.count {
-                    let prediction = predictions[i]
-                    if (prediction.classIndex == 0) { //クラッピーを検知
-                        cluppies.append(self.createPlayerFromPrediction(from: prediction))
-                    }
-                }
-            }
-        } else { //2回目以降 : 確認処理
-            var flgFire = false
-            var targetCluppy: Player!
-            var findIndexes: [Bool] = []
-            for _ in cluppies {
-                findIndexes.append(false)
-            }
-            // クラッピー(0, 1) のみフィルターして Playerに変換
-            let currentCluppies = predictions.filter { $0.classIndex == 0 || $0.classIndex == 1 }.map { self.createPlayerFromPrediction(from: $0) } //クラッピーを検知
-            
-            // 同一オブジェクト判定 & 移動判定
-            for cru in currentCluppies {
-                
-                // TODO : n回分で平均取る
-                
-                var isMatch = false
-                for i in 0..<self.cluppies.count {
-                    let old = self.cluppies[i]
-                    if findIndexes[i] {
-                        print("すでに発見ずみ　\(i)")
-                        continue //すでに発見済み
-                        // FIXME: 認識率悪かったら取る
-                    }
-                    
-                    let rect = cru.rect
-                    print("x:\(rect.origin.x), y:\(rect.origin.y), width:\(rect.size.width), height:\(rect.size.height), midX:\(rect.midX), midY:\(rect.midY)")
-                    //                    //x:177.569534301758, y:31.5921630859375, width:197.188385009766, height:407.814971923828, midX:276.163726806641, midY:235.499649047852
-                    
-                    // 既存のエントリーと同じものか確認 (含まれているか, 重なりがあるか)
-                    if old.rect.contains(cru.rect) || old.rect.intersects(cru.rect) {
-                        print("\(old.classIndex):(\(old.center.x),\(old.center.y)) vs \(cru.classIndex):(\(cru.center.x),\(cru.center.y))")
-                        // TODO : すでにrectが重ならないくらい動いてるとまずい
-                        if self.getCenterDiff(p1: old, p2: cru) { // 座標の変更量が閾値を超えたら動いたと判断
-                            print("target is detected! - 1")
-                            flgFire = true
-                            targetCluppy = cru
-                        } // else : 動きなし
-                        
-                        findIndexes[i] = true
-                        self.cluppies[i].rect = cru.rect //ジリジリ動いたときに検出できない場合は外す
-                        isMatch = true
-                        break
-                    }
-                }
-                if !isMatch { //見つからなかった = 新規
-                    self.cluppies.append(cru)
-                }
-                if flgFire { //見つかった&動いてる
-                    break
-                }
-            }
-            if flgFire { // TODO : ダルマさんが転んだ
-                print("target is detected! - 2")
-                self.currentMode = .terminator
-                
-                // TODO : XYでどの領域に居るか判断
-                // targetCluppy.rect or targetCluppy.center
-                
-                let width = CGFloat(YOLO.inputWidth)
-                let height = CGFloat(YOLO.inputHeight)
-                
-                // TODO : LEFT, CNTER, RIGHT くらいは分けたい
-                let center = CGPoint(x: width / 2, y: height / 2)
-                
-                var commandQueue : [BLECommand] = []
-                commandQueue.append(BLECommand(kind: CommandKind.servomotorOn, time:0)) //クラッピーを起こす
-                if targetCluppy.center.x < center.x { // 右
-                    commandQueue.append(BLECommand(kind: CommandKind.turnLeft, time:1500))
-                } else if center.x < targetCluppy.center.x { //左
-                    commandQueue.append(BLECommand(kind: CommandKind.turnRight, time:1500))
-                }
-                commandQueue.append(BLECommand(kind: CommandKind.forward, time:6000)) //前進して迫る
-                
-                // BLE コマンド送信
-                for cmd in commandQueue {
-                    self.sendCommand(data: cmd.build())
-                    // TODO : cmd.time 分だけ次の送信をdelayする
-                }
-            }
-        }
-    }
-    
-    func detectAndTrace(predictions: [YOLO.Prediction]) {
-        // TODO : リアルタイム追尾
-        // TODO : 必要なだけ近づいたら止まる or 時間で止める
-    }
-    
     // TODO : WebSocketで event7 を受けたら CommandKind.spinTurnを発火する & mode を detecting へ
     
     func show(predictions: [YOLO.Prediction]) {

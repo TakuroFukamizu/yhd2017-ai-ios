@@ -65,7 +65,7 @@ extension ViewController: CBPeripheralDelegate {
         }
         
         //キャリアクタリスティク探索開始
-        peripheral.discoverCharacteristics([charcteristicUUID],
+        peripheral.discoverCharacteristics([charcteristicUUID, charcteristic2UUID],
                                            for: (peripheral.services?.first)!)
         
         let services = peripheral.services
@@ -84,26 +84,42 @@ extension ViewController: CBPeripheralDelegate {
         }
         let characteristics = self.botService.characteristics
         print("Found \(characteristics?.count) characteristics! : \(characteristics)")
-        self.botCmdChara = characteristics![0]
         
-//        peripheral.setNotifyValue(true, for: (service.characteristics?.first)!)
+//        self.botCmdChara = characteristics![0]
+
+        for c in characteristics! {
+            if charcteristicUUID.isEqual(c.uuid) {
+                print(charcteristicUUID)
+                self.botCmdChara = c
+            }
+            if charcteristic2UUID.isEqual(c.uuid) {
+                print(charcteristic2UUID)
+                self.botManChara = c
+                peripheral.setNotifyValue(true, for: c)
+            }
+        }
+        
+        // ロボット初期化
+        self.doRobotReset()
     }
     
-//    /// データ更新時に呼ばれる
-//    func peripheral(_ peripheral: CBPeripheral,
-//                    didUpdateValueFor characteristic: CBCharacteristic,
-//                    error: Error?) {
-//
-//        if error != nil {
-//            print(error.debugDescription)
-//            return
-//        }
-//
-//        updateWithData(data: characteristic.value!)
-//    }
+    /// データ更新時に呼ばれる
+    func peripheral(_ peripheral: CBPeripheral,
+                    didUpdateValueFor characteristic: CBCharacteristic,
+                    error: Error?) {
+        print("notify is incoming : \(characteristic.value!)")
+        if error != nil {
+            print(error.debugDescription)
+            return
+        }
+        if !charcteristic2UUID.isEqual(characteristic.uuid) {
+           return
+        }
+        self.getBleNotifyManualCmd(data: characteristic.value!)
+    }
     
     public func sendCommand(data : Data) {
-        print(#function)
+        print("\(#function) - \([UInt8](data))")
         
 //        self.peripheral.writeValue(data, for: self.botCmdChara, type: CBCharacteristicWriteType.withoutResponse) //ESP32 が withoutResponseだと通らない
         self.peripheral.writeValue(data, for: self.botCmdChara, type: CBCharacteristicWriteType.withResponse)

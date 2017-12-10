@@ -20,8 +20,8 @@ public enum CommandKind {
 }
 
 public class BLECommand {
-    let kind: CommandKind
-    let time: UInt16
+    public let kind: CommandKind
+    public let time: UInt16
     
     public init(kind: CommandKind, time: UInt16) {
         self.kind = kind
