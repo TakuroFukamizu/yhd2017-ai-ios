@@ -31,9 +31,20 @@ public class VideoCapture: NSObject {
     captureSession.beginConfiguration()
     captureSession.sessionPreset = sessionPreset
 
-    guard let captureDevice = AVCaptureDevice.default(for: AVMediaType.video) else {
+    guard var captureDevice = AVCaptureDevice.default(for: AVMediaType.video) else {
       print("Error: no video devices available")
       return false
+    }
+    
+    // Use In-Camera
+    guard let devices = AVCaptureDevice.devices() else {
+        return
+    }
+    for device in devices {
+        let devicePosition: AVCaptureDevicePosition = .front
+        if (device as AnyObject).position == devicePosition {
+            captureDevice = device as! AVCaptureDevice
+        }
     }
 
     guard let videoInput = try? AVCaptureDeviceInput(device: captureDevice) else {
