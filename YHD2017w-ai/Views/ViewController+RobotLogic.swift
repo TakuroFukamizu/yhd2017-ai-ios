@@ -54,8 +54,8 @@ extension ViewController {
     
     // 中心点を比較して、差分が許容値を超えたら移動したと判定する
     func getCenterDiff(p1: Player, p2: Player) -> Bool {
-        var diffX:CGFloat = 50 //差分許容値(X)
-        var diffY:CGFloat = 100 //差分許容値(Y) クラッピーの構造上、下方向のズレは大きい
+        let diffX:CGFloat = 50 //差分許容値(X)
+        let diffY:CGFloat = 100 //差分許容値(Y) クラッピーの構造上、下方向のズレは大きい
         
         // TODO : スケール計算
         

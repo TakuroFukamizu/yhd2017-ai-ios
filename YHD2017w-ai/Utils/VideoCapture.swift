@@ -34,16 +34,16 @@ public class VideoCapture: NSObject {
     guard var captureDevice = AVCaptureDevice.default(for: AVMediaType.video) else {
       print("Error: no video devices available")
       return false
-    }
+    } // FIXME
     
     // Use In-Camera
-    guard let devices = AVCaptureDevice.devices() else {
-        return
-    }
-    for device in devices {
-        let devicePosition: AVCaptureDevicePosition = .front
+    let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera],
+                                                            mediaType: AVMediaType.video,
+                                                            position: .front)
+    for device in discoverySession.devices {
+        let devicePosition: AVCaptureDevice.Position = .front
         if (device as AnyObject).position == devicePosition {
-            captureDevice = device as! AVCaptureDevice
+            captureDevice = device
         }
     }
 

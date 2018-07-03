@@ -20,7 +20,11 @@ DerivedData
 Pods/*
 Podfile.lock
 
+# Carthage
+Carthage/Checkouts
+
 # others
 *.swp
 !.gitkeep
 .DS_Store
+
