@@ -147,14 +147,8 @@ extension ViewController {
                         // FIXME: 認識率悪かったら取る
                     }
                     
-                    let rect = cru.rect
-                    print("x:\(rect.origin.x), y:\(rect.origin.y), width:\(rect.size.width), height:\(rect.size.height), midX:\(rect.midX), midY:\(rect.midY)")
-                    //                    //x:177.569534301758, y:31.5921630859375, width:197.188385009766, height:407.814971923828, midX:276.163726806641, midY:235.499649047852
-                    
                     // 既存のエントリーと同じものか確認 (含まれているか, 重なりがあるか)
                     if old.rect.contains(cru.rect) || old.rect.intersects(cru.rect) {
-                        print("\(old.classIndex):(\(old.center.x),\(old.center.y)) vs \(cru.classIndex):(\(cru.center.x),\(cru.center.y))")
-                        // TODO : すでにrectが重ならないくらい動いてるとまずい
                         if self.getCenterDiff(p1: old, p2: cru) { // 座標の変更量が閾値を超えたら動いたと判断
                             print("target is detected! - 1")
                             flgFire = true
@@ -174,19 +168,17 @@ extension ViewController {
                     break
                 }
             }
-            if flgFire { // TODO : ダルマさんが転んだ
+            if flgFire { // ダルマさんが転んだ
                 print("target is detected! - 2")
-                self.currentMode = .terminator
+                self.currentMode = .terminator //クラッピー追跡モード
                 
-                // TODO : XYでどの領域に居るか判断
-                // targetCluppy.rect or targetCluppy.center
-                
+                // XYでどの領域に居るか判断
+                // TODO : 動かして微妙だったら LEFT, CNTER, RIGHT (or もっと)に分ける
                 let width = CGFloat(YOLO.inputWidth)
                 let height = CGFloat(YOLO.inputHeight)
-                
-                // TODO : LEFT, CNTER, RIGHT くらいは分けたい
                 let center = CGPoint(x: width / 2, y: height / 2)
                 
+                // 最初の追跡動作用のBLEコマンド
                 var commandQueue : [BLECommand] = []
                 commandQueue.append(BLECommand(kind: CommandKind.servomotorOn, time:0)) //クラッピーを起こす
                 if targetCluppy.center.x < center.x { // 右

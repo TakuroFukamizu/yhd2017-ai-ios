@@ -42,8 +42,6 @@ class ViewController: UIViewController {
     var frameCapturingStartTime = CACurrentMediaTime()
     let semaphore = DispatchSemaphore(value: 2)
 
-    let detects = DetectQueue()
-
     var isNeedRotate = false
     
     var currentMode = DriveMode.waiting
@@ -59,7 +57,7 @@ class ViewController: UIViewController {
     var botManChara : CBCharacteristic! //マニュアル操作用
     
     // for Control Robot
-    var cluppies : [Player] = []
+    var cluppies : [Player] = [] //現在捕捉中のクラッピーのリスト
     var cmdQueueItrt : CommandQueueIterator?
     var cmdExecTimer : Timer?
     var cmdNextDelay : TimeInterval = 0.0
