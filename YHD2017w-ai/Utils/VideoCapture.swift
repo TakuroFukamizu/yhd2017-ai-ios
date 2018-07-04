@@ -10,6 +10,8 @@ public class VideoCapture: NSObject {
   public var previewLayer: AVCaptureVideoPreviewLayer?
   public weak var delegate: VideoCaptureDelegate?
   public var fps = 15
+  public var isFrontCamera = true
+    
 
   let captureSession = AVCaptureSession()
   let videoOutput = AVCaptureVideoDataOutput()
@@ -31,23 +33,25 @@ public class VideoCapture: NSObject {
     captureSession.beginConfiguration()
     captureSession.sessionPreset = sessionPreset
 
-    guard var captureDevice = AVCaptureDevice.default(for: AVMediaType.video) else {
-      print("Error: no video devices available")
-      return false
-    } // FIXME
+    // カメラの取得
+    let devicePosition: AVCaptureDevice.Position = self.isFrontCamera ? .front : .back
+    var captureDevice: AVCaptureDevice?
     
-    // Use In-Camera
-    let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera],
+    
+    let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera, .builtInTelephotoCamera],
                                                             mediaType: AVMediaType.video,
-                                                            position: .front)
+                                                            position: devicePosition)
     for device in discoverySession.devices {
-        let devicePosition: AVCaptureDevice.Position = .front
         if (device as AnyObject).position == devicePosition {
             captureDevice = device
         }
     }
+    if captureDevice == nil {
+        print("Error: no camera devices available")
+        return false
+    }
 
-    guard let videoInput = try? AVCaptureDeviceInput(device: captureDevice) else {
+    guard let videoInput = try? AVCaptureDeviceInput(device: captureDevice!) else {
       print("Error: could not create AVCaptureDeviceInput")
       return false
     }

@@ -35,7 +35,7 @@ extension ViewController: CBCentralManagerDelegate {
             return
         }
         print("Found peripheral : \(String(describing: peripheral.name)), \(RSSI)")
-        print(peripheral.services )
+        print(peripheral.services ?? "no services" )
         
         self.peripheral = peripheral
         centralManager?.stopScan()
@@ -69,7 +69,7 @@ extension ViewController: CBPeripheralDelegate {
                                            for: (peripheral.services?.first)!)
         
         let services = peripheral.services
-        print("Found \(services?.count) services! :\(services)")
+        print("Found \(String(describing: services?.count)) services! :\(String(describing: services))")
         self.botService = services![0]
     }
     
@@ -83,7 +83,7 @@ extension ViewController: CBPeripheralDelegate {
             return
         }
         let characteristics = self.botService.characteristics
-        print("Found \(characteristics?.count) characteristics! : \(characteristics)")
+        print("Found \(String(describing: characteristics?.count)) characteristics! : \(String(describing: characteristics))")
         
 //        self.botCmdChara = characteristics![0]
 

@@ -43,6 +43,7 @@ extension ViewController {
         videoCapture = VideoCapture()
         videoCapture.delegate = self
         videoCapture.fps = 50
+        videoCapture.isFrontCamera = self.isUseFrontCamera //フロントカメラを指定
         videoCapture.setUp(sessionPreset: AVCaptureSession.Preset.vga640x480) { success in
             if success {
                 // Add the video preview into the UI.

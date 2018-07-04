@@ -25,6 +25,9 @@ class ViewController: UIViewController {
     @IBAction func onResetButonClick() {
         self.doRobotReset()
     }
+    
+    // フロントカメラを使用
+    let isUseFrontCamera = true
 
     let yolo = YOLO()
 
@@ -193,19 +196,12 @@ class ViewController: UIViewController {
             let boundingBoxes = yolo.computeBoundingBoxes(features: features)
             let elapsed = CACurrentMediaTime() - startTimes.remove(at: 0)
             
-//            var fCoffee = false
-//            var fItem01 = false
-//            var fItem02 = false
+            // TODO: 認識結果により処理を変える場合はここに
 //            for box in boundingBoxes {
-//                if (box.classIndex < 6) { //缶コーヒー
-//                    fCoffee = true
-//                } else if (box.classIndex == 6) { //カップヌードル
-//                    fItem01 = true
-//                } else if (box.classIndex == 7) { //コアラのマーチ
-//                    fItem02 = true
+//                if (box.classIndex < 6) {
+//                    // do something
 //                }
 //            }
-//            detects.enqueue(hasCoffee: fCoffee, hasItem01: fItem01, hasItem02: fItem02) //検出した種類を記録
             
             showOnMainThread(boundingBoxes, elapsed)
         }
@@ -284,6 +280,11 @@ class ViewController: UIViewController {
             rect.origin.y += top
             rect.size.width *= scaleX
             rect.size.height *= scaleY
+            
+            // フロントカメラの場合は左右反転
+            if self.isUseFrontCamera {
+                rect.origin.x = width - (rect.origin.x + rect.size.width)
+            }
 
             // Show the bounding box.
     //        let label = String(format: "%@ %.1f", labels[prediction.classIndex], prediction.score * 100)
