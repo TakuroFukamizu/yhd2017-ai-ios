@@ -19,7 +19,10 @@ class YOLO {
         "トールくん(黄)",
         "ヒミツのクマちゃん",
         "シルバニアのうさぎ",
-        "Masawo Yamazaki"
+        "Masawo Yamazaki",
+        "止まれ",
+        "クラッピー(白)",
+        "クラッピー(ピンク)"
     ]
     
     let blockSize: Float = 32 //入力画像の32 x 32ピクセルが特徴マップ上の1ピクセルに対応する
@@ -29,7 +32,7 @@ class YOLO {
     let numClasses = YOLO.labels.count
     
 //    let model = CoffeeTinyYOLO()
-    let model = TinyYOLOClpy()
+    let model = TinyYOLO()
     
     let anchors: [Float] = [1.08, 1.19, 3.42, 4.41, 6.63, 11.38, 9.42, 5.11, 16.62, 10.52]
     

@@ -43,6 +43,10 @@ extension ViewController {
         // timer.invalidate()      // cancel it.
     }
     
+    func stopCommandQueue() {
+        self.cmdExecTimer?.invalidate()
+    }
+    
     
     func createPlayerFromPrediction(from: YOLO.Prediction) -> Player {
         let pointX = from.rect.midX
@@ -112,13 +116,28 @@ extension ViewController {
         self.currentMode = .waiting
     }
     
+    private func isClappy(_ target: YOLO.Prediction) -> Bool {
+        switch target.classIndex {
+        case 0: //トールくん(赤)
+            return true
+        case 1: //トールくん(黄)
+            return true
+        case 6: //クラッピー(白)
+            return true
+        case 7: //クラッピー(ピンク)
+            return true
+        default:
+            return false
+        }
+    }
+    
     /// 同一判断する, 差分確認する, 追いかける
     func detectPlayerAndDiff(predictions: [YOLO.Prediction]) {
         if self.cluppies.count == 0 { //初回 or クリア後
             for i in 0..<boundingBoxes.count {
                 if i < predictions.count {
                     let prediction = predictions[i]
-                    if (prediction.classIndex == 0) { //クラッピーを検知
+                    if (isClappy(prediction)) { //クラッピーを検知
                         cluppies.append(self.createPlayerFromPrediction(from: prediction))
                     }
                 }
@@ -130,8 +149,8 @@ extension ViewController {
             for _ in cluppies {
                 findIndexes.append(false)
             }
-            // クラッピー(0, 1) のみフィルターして Playerに変換
-            let currentCluppies = predictions.filter { $0.classIndex == 0 || $0.classIndex == 1 }.map { self.createPlayerFromPrediction(from: $0) } //クラッピーを検知
+            // クラッピー(0, 1, 6, 7) のみフィルターして Playerに変換
+            let currentCluppies = predictions.filter { isClappy($0) }.map { self.createPlayerFromPrediction(from: $0) } //クラッピーを検知
             
             // 同一オブジェクト判定 & 移動判定
             for cru in currentCluppies {
@@ -198,6 +217,19 @@ extension ViewController {
     func detectAndTrace(predictions: [YOLO.Prediction]) {
         // TODO : リアルタイム追尾
         // TODO : 必要なだけ近づいたら止まる or 時間で止める
+    }
+    
+    func stopTrace() {
+        self.stopCommandQueue() //送信中のコマンドキューをキャンセル
+        
+        // 最初の追跡動作用のBLEコマンド
+        var commandQueue : [BLECommand] = []
+        commandQueue.append(BLECommand(kind: CommandKind.stop, time:0)) //停止する
+        commandQueue.append(BLECommand(kind: CommandKind.servomotorOff, time:0)) //サーボを戻す
+        
+        // BLE コマンド送信 開始
+        self.cmdQueueItrt = CommandQueueIterator(commandQueue)
+        self.setNextCommand()
     }
 
 }

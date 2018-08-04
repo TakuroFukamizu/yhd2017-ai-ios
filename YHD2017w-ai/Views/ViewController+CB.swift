@@ -8,6 +8,10 @@
 
 import Foundation
 import CoreBluetooth
+import ToastSwiftFramework
+
+var isPowerOn = false
+var isConnectedFlag = false
 
 //MARK : - CBCentralManagerDelegate
 extension ViewController: CBCentralManagerDelegate {
@@ -15,14 +19,36 @@ extension ViewController: CBCentralManagerDelegate {
 //    let charcteristicUUID = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
 
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        //電源ONを待って、スキャンする
+        //電源ONを待って、スキャンするように
         if (central.state == .poweredOn) {
             print("BLE central is poweredOn")
-            let services: [CBUUID] = [serviceUUID]
-            print(services)
-//            centralManager?.scanForPeripherals(withServices: services, options: nil)
-            centralManager?.scanForPeripherals(withServices: nil, options: nil)
+            isPowerOn = true
+            isConnectedFlag = false
         }
+    }
+    
+    func doConnection() {
+        if (!isPowerOn) {
+            self.view.makeToast("Bluetoot is disable")
+            return
+        }
+//        self.view.makeToastActivity(.center) //なんか消えないので一旦消す
+        
+        let services: [CBUUID] = [serviceUUID]
+        print(services)
+        //            centralManager?.scanForPeripherals(withServices: services, options: nil)
+        centralManager?.scanForPeripherals(withServices: nil, options: nil)
+    }
+    
+    func doDisconnect() {
+        self.centralManager?.cancelPeripheralConnection(self.peripheral)
+        self.view.hideAllToasts()
+        self.connectButton?.titleLabel?.text = "CONNECT"
+        isConnectedFlag = false
+    }
+    
+    func isConnected() -> Bool {
+        return isConnectedFlag
     }
     
     /// STEP-1 ペリフェラルを発見すると呼ばれる
@@ -42,6 +68,7 @@ extension ViewController: CBCentralManagerDelegate {
         
         //接続開始
         central.connect(peripheral, options: nil)
+        print("Finish STEP-1")
     }
     
     /// STEP-2 接続されると呼ばれる
@@ -50,6 +77,7 @@ extension ViewController: CBCentralManagerDelegate {
         
         peripheral.delegate = self
         peripheral.discoverServices([serviceUUID])
+        print("Finish STEP-2")
     }
 }
 
@@ -71,6 +99,7 @@ extension ViewController: CBPeripheralDelegate {
         let services = peripheral.services
         print("Found \(String(describing: services?.count)) services! :\(String(describing: services))")
         self.botService = services![0]
+        print("Finish STEP-3")
     }
     
     /// STEP-4 キャリアクタリスティク発見時に呼ばれる
@@ -99,8 +128,16 @@ extension ViewController: CBPeripheralDelegate {
             }
         }
         
+        // Toast表示
+        self.view.hideAllToasts() //効かない？
+        let deviceName = self.peripheral!.name
+        self.view.makeToast("\(String(describing: deviceName)) is Connected")
+        self.connectButton?.titleLabel?.text = "DISCONNECT"
+        isConnectedFlag = true
+        
         // ロボット初期化
         self.doRobotReset()
+        print("Finish STEP-4")
     }
     
     /// データ更新時に呼ばれる

@@ -26,6 +26,16 @@ class ViewController: UIViewController {
         self.doRobotReset()
     }
     
+    @IBOutlet weak var connectButton: UIButton!
+    
+    @IBAction func onConnectButtonClick() {
+        if (!self.isConnected()) {
+            self.doConnection() // 未接続なら接続する
+        } else {
+            self.doDisconnect() // 接続済なら切断する
+        }
+    }
+    
     // フロントカメラを使用
     let isUseFrontCamera = true
 
@@ -244,17 +254,27 @@ class ViewController: UIViewController {
     // TODO : WebSocketで event7 を受けたら CommandKind.spinTurnを発火する & mode を detecting へ
     
     func show(predictions: [YOLO.Prediction]) {
-        switch self.currentMode {
-        case .detecting:
-            self.detectPlayerAndDiff(predictions: predictions)
-            break
-        case .terminator:
-            self.detectAndTrace(predictions: predictions) //追尾する
-            break
-        default:
-            break
-            // 無視
-//            print("waiting mode")
+        if self.isConnected() {
+            // 非常停止
+            let stopSigns = predictions.filter { $0.classIndex == 5 }.map { self.createPlayerFromPrediction(from: $0) } //止まれ を検知
+            if stopSigns.count > 0 {
+                self.stopTrace()
+                self.currentMode = .waiting
+                return
+            }
+            
+            switch self.currentMode {
+            case .detecting:
+                self.detectPlayerAndDiff(predictions: predictions)
+                break
+            case .terminator:
+                self.detectAndTrace(predictions: predictions) //追尾する
+                break
+            default:
+                break
+                // 無視
+                //            print("waiting mode")
+            }
         }
         
         

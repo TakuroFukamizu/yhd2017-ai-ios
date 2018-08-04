@@ -12,7 +12,6 @@
 		0C0231331F7A52DF00EDB7F4 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C02312F1F7A52DF00EDB7F4 /* Helpers.swift */; };
 		0C08790A1F8E0502001252A4 /* UIDevice+platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0879091F8E0502001252A4 /* UIDevice+platform.swift */; };
 		0C0879101F8F69F1001252A4 /* CIImage+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C08790F1F8F69F1001252A4 /* CIImage+Helpers.swift */; };
-		0C494AA91FD727190094C987 /* TinyYOLOClpy.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0C494AA81FD727190094C987 /* TinyYOLOClpy.mlmodel */; };
 		3C160E091FDBBC6300517A67 /* ViewController+CB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C160E081FDBBC6300517A67 /* ViewController+CB.swift */; };
 		3C160E0B1FDBC3FB00517A67 /* BLECommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C160E0A1FDBC3FB00517A67 /* BLECommand.swift */; };
 		3C160E0F1FDBF58200517A67 /* ViewController+Cameras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C160E0E1FDBF58200517A67 /* ViewController+Cameras.swift */; };
@@ -23,6 +22,9 @@
 		3C160E1F1FDC9BF300517A67 /* SocketIO.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3C160E1C1FDC9BF300517A67 /* SocketIO.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3C160E201FDC9BF300517A67 /* Starscream.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C160E1D1FDC9BF300517A67 /* Starscream.framework */; };
 		3C160E211FDC9BF300517A67 /* Starscream.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3C160E1D1FDC9BF300517A67 /* Starscream.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		786C82C020F0A14B00E9FCF0 /* ToastSwiftFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 786C82BE20F0A14300E9FCF0 /* ToastSwiftFramework.framework */; };
+		786C82C120F0A14B00E9FCF0 /* ToastSwiftFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 786C82BE20F0A14300E9FCF0 /* ToastSwiftFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		787B18F021150EE100F6817E /* TinyYOLO.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 787B18EF21150EE100F6817E /* TinyYOLO.mlmodel */; };
 		7BA1C6D01EF27DA000BB25EF /* VideoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BC25FB51EF27C0D002ECBBA /* VideoCapture.swift */; };
 		7BA1C6D21EF2827800BB25EF /* UIImage+CVPixelBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA1C6D11EF2827500BB25EF /* UIImage+CVPixelBuffer.swift */; };
 		7BA1C6D81EF2871600BB25EF /* YOLO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA1C6D71EF2871600BB25EF /* YOLO.swift */; };
@@ -40,6 +42,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				3C160E1F1FDC9BF300517A67 /* SocketIO.framework in Embed Frameworks */,
+				786C82C120F0A14B00E9FCF0 /* ToastSwiftFramework.framework in Embed Frameworks */,
 				3C160E211FDC9BF300517A67 /* Starscream.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -53,8 +56,6 @@
 		0C02312F1F7A52DF00EDB7F4 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		0C0879091F8E0502001252A4 /* UIDevice+platform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+platform.swift"; sourceTree = "<group>"; };
 		0C08790F1F8F69F1001252A4 /* CIImage+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CIImage+Helpers.swift"; sourceTree = "<group>"; };
-		0C494AA81FD727190094C987 /* TinyYOLOClpy.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = TinyYOLOClpy.mlmodel; sourceTree = "<group>"; };
-		0C7B168B1F83DDBD0042A67A /* TinyYOLO.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = TinyYOLO.mlmodel; sourceTree = "<group>"; };
 		3C160E081FDBBC6300517A67 /* ViewController+CB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+CB.swift"; sourceTree = "<group>"; };
 		3C160E0A1FDBC3FB00517A67 /* BLECommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLECommand.swift; sourceTree = "<group>"; };
 		3C160E0E1FDBF58200517A67 /* ViewController+Cameras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Cameras.swift"; sourceTree = "<group>"; };
@@ -65,6 +66,8 @@
 		3C160E181FDC960C00517A67 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
 		3C160E1C1FDC9BF300517A67 /* SocketIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketIO.framework; path = Carthage/Build/iOS/SocketIO.framework; sourceTree = "<group>"; };
 		3C160E1D1FDC9BF300517A67 /* Starscream.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Starscream.framework; path = Carthage/Build/iOS/Starscream.framework; sourceTree = "<group>"; };
+		786C82BE20F0A14300E9FCF0 /* ToastSwiftFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ToastSwiftFramework.framework; path = Carthage/Build/iOS/ToastSwiftFramework.framework; sourceTree = "<group>"; };
+		787B18EF21150EE100F6817E /* TinyYOLO.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = TinyYOLO.mlmodel; sourceTree = "<group>"; };
 		7BA1C6D11EF2827500BB25EF /* UIImage+CVPixelBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+CVPixelBuffer.swift"; sourceTree = "<group>"; };
 		7BA1C6D71EF2871600BB25EF /* YOLO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YOLO.swift; sourceTree = "<group>"; };
 		7BA1C6D91EF2B30200BB25EF /* CVPixelBuffer+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CVPixelBuffer+Helpers.swift"; sourceTree = "<group>"; };
@@ -83,6 +86,7 @@
 			files = (
 				3C160E1E1FDC9BF300517A67 /* SocketIO.framework in Frameworks */,
 				3C160E201FDC9BF300517A67 /* Starscream.framework in Frameworks */,
+				786C82C020F0A14B00E9FCF0 /* ToastSwiftFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,8 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				7BA1C6D71EF2871600BB25EF /* YOLO.swift */,
-				0C494AA81FD727190094C987 /* TinyYOLOClpy.mlmodel */,
-				0C7B168B1F83DDBD0042A67A /* TinyYOLO.mlmodel */,
+				787B18EF21150EE100F6817E /* TinyYOLO.mlmodel */,
 			);
 			path = CoreML;
 			sourceTree = "<group>";
@@ -147,6 +150,7 @@
 		3C160E161FDC960B00517A67 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				786C82BE20F0A14300E9FCF0 /* ToastSwiftFramework.framework */,
 				3C160E171FDC960C00517A67 /* SocketIO.framework */,
 				3C160E181FDC960C00517A67 /* Starscream.framework */,
 			);
@@ -277,7 +281,6 @@
 				0C0879101F8F69F1001252A4 /* CIImage+Helpers.swift in Sources */,
 				0C0231321F7A52DF00EDB7F4 /* AppDelegate.swift in Sources */,
 				3C160E091FDBBC6300517A67 /* ViewController+CB.swift in Sources */,
-				0C494AA91FD727190094C987 /* TinyYOLOClpy.mlmodel in Sources */,
 				7BA1C6D01EF27DA000BB25EF /* VideoCapture.swift in Sources */,
 				3C160E0F1FDBF58200517A67 /* ViewController+Cameras.swift in Sources */,
 				7BA1C6DA1EF2B30200BB25EF /* CVPixelBuffer+Helpers.swift in Sources */,
@@ -290,6 +293,7 @@
 				7BA1C6D81EF2871600BB25EF /* YOLO.swift in Sources */,
 				3C160E111FDC790D00517A67 /* Timeout.swift in Sources */,
 				3C160E131FDC79F200517A67 /* CommandQueueIterator.swift in Sources */,
+				787B18F021150EE100F6817E /* TinyYOLO.mlmodel in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

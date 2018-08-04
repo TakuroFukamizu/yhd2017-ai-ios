@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="Menlo.ttc">
-            <string>Menlo-Regular</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -37,9 +32,8 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oVm-ZA-xlK">
-                                                <rect key="frame" x="316" y="0.0" width="46" height="30"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oVm-ZA-xlK">
+                                                <rect key="frame" x="309" y="-17" width="46" height="30"/>
                                                 <state key="normal" title="RESET"/>
                                                 <connections>
                                                     <action selector="onResetButonClick" destination="BYZ-38-t0r" eventType="touchUpInside" id="iFe-AP-KuC"/>
@@ -48,17 +42,31 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="Nv7-zv-Hv7" secondAttribute="bottom" constant="10" id="RnN-mQ-1Ld"/>
+                                            <constraint firstAttribute="bottom" secondItem="oVm-ZA-xlK" secondAttribute="bottom" constant="41" id="4Mm-UT-YKr"/>
+                                            <constraint firstAttribute="bottom" secondItem="Nv7-zv-Hv7" secondAttribute="bottom" constant="8" id="RnN-mQ-1Ld"/>
+                                            <constraint firstAttribute="trailing" secondItem="oVm-ZA-xlK" secondAttribute="trailing" constant="20" id="X8D-G0-RnX"/>
                                             <constraint firstItem="Nv7-zv-Hv7" firstAttribute="leading" secondItem="Cau-LW-nDZ" secondAttribute="leading" constant="20" id="YWK-0U-hbi"/>
                                             <constraint firstAttribute="trailing" secondItem="Nv7-zv-Hv7" secondAttribute="trailing" constant="20" id="c27-CJ-wZL"/>
                                             <constraint firstItem="Nv7-zv-Hv7" firstAttribute="top" secondItem="Cau-LW-nDZ" secondAttribute="top" constant="10" id="lQX-Nw-dxK"/>
                                         </constraints>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sTS-hA-lIR">
+                                        <rect key="frame" x="141" y="597" width="140" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="140" id="M39-30-sfb"/>
+                                        </constraints>
+                                        <state key="normal" title="CONNECT"/>
+                                        <connections>
+                                            <action selector="onConnectButtonClick" destination="BYZ-38-t0r" eventType="touchUpInside" id="alz-mP-MyG"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Cau-LW-nDZ" secondAttribute="trailing" id="525-TG-AYb"/>
+                                    <constraint firstItem="oVm-ZA-xlK" firstAttribute="leading" secondItem="sTS-hA-lIR" secondAttribute="trailing" constant="28" id="CF1-ng-uUt"/>
                                     <constraint firstAttribute="bottom" secondItem="Cau-LW-nDZ" secondAttribute="bottom" id="Dhv-Hl-guL"/>
+                                    <constraint firstAttribute="bottom" secondItem="sTS-hA-lIR" secondAttribute="bottom" constant="40" id="Qjj-Xv-aa3"/>
                                     <constraint firstItem="Cau-LW-nDZ" firstAttribute="leading" secondItem="6b2-uP-TiX" secondAttribute="leading" id="fME-Xk-LPo"/>
                                 </constraints>
                             </view>
@@ -76,6 +84,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="connectButton" destination="sTS-hA-lIR" id="d9v-F9-LTj"/>
                         <outlet property="debugImageView" destination="YNc-Bp-8Q7" id="Efd-I1-2Hu"/>
                         <outlet property="resetButton" destination="oVm-ZA-xlK" id="LZo-3R-hT5"/>
                         <outlet property="timeLabel" destination="Nv7-zv-Hv7" id="U6m-yA-4aP"/>
